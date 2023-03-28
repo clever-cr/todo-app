@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import { useState } from "react";
 import { GoPlus } from "react-icons/go";
 import List from "./components/List";
@@ -22,8 +21,8 @@ const App = () => {
       alert("Add a todo");
     } else {
       setAllTodos((prevtodo) => [
-        { text: inputValue, checked: false },
         ...prevtodo,
+        { text: inputValue, checked: false },
       ]);
       setInputValue("");
     }
