@@ -1,35 +1,63 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { GoPlus } from "react-icons/go";
+import List from "./components/List";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [inputValue, setInputValue] = useState("");
+  const [allTodos, setAllTodos] = useState([]);
+
+  const handleChange = (event) => setInputValue(event.target.value);
+
+  const todoCheck = (index) => {
+    setAllTodos((prevtodos) => {
+      return prevtodos.map((item, id) => {
+        return id === index ? { ...item, checked: !item.checked } : item;
+      });
+    });
+  };
+
+  const handleAdd = () => {
+    if (inputValue.trim() == "") {
+      alert("Add a todo");
+    } else {
+      setAllTodos((prevtodo) => [
+        ...prevtodo,
+        { text: inputValue, checked: false },
+      ]);
+      setInputValue("");
+    }
+  };
+
+  const handleDelete = (index) =>
+    setAllTodos((prevtodo) => prevtodo.filter((item, id) => id !== index));
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="p-12 space-y-12">
+      <h3 className="text-7xl text-gray-300">todos</h3>
+      <div className="flex items-center  px-5 p-2 rounded-xl shadow-lg justify-between">
+        <input
+          type="text"
+          className="outline-none w-full"
+          placeholder="Add todo..."
+          value={inputValue}
+          onChange={handleChange}
+          name="todo"
+        />
+        <GoPlus
+          onClick={handleAdd}
+          className="bg-green-700 text-white rounded-full px-1 w-5 h-5"
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {allTodos.map((todo, index) => (
+        <List
+          key={index}
+          handle={() => handleDelete(index)}
+          item={todo}
+          handleChecked={() => todoCheck(index)}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
