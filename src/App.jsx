@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import { GoPlus } from "react-icons/go";
 import List from "./components/List";
@@ -8,27 +9,28 @@ const App = () => {
 
   const handleChange = (event) => setInputValue(event.target.value);
 
-  const todoCheck = (i) => {
+  const todoCheck = (index) => {
     setAllTodos((prevtodos) => {
-      return prevtodos.map((item, index) => {
-        return index === i ? { ...item, checked: !item.checked } : item;
+      return prevtodos.map((item, id) => {
+        return id === index ? { ...item, checked: !item.checked } : item;
       });
     });
   };
 
   const handleAdd = () => {
-    if (inputValue == "") {
+    if (inputValue.trim() == "") {
       alert("Add a todo");
     } else {
       setAllTodos((prevtodo) => [
         { text: inputValue, checked: false },
         ...prevtodo,
       ]);
+      setInputValue("");
     }
   };
 
-  const handleDelete = (i) =>
-    setAllTodos((prevtodo) => prevtodo.filter((item, index) => index !== i));
+  const handleDelete = (index) =>
+    setAllTodos((prevtodo) => prevtodo.filter((item, id) => id !== index));
 
   return (
     <div className="p-12 space-y-12">
@@ -47,11 +49,11 @@ const App = () => {
           className="bg-green-700 text-white rounded-full px-1 w-5 h-5"
         />
       </div>
-      {allTodos.map((i, index) => (
+      {allTodos.map((todo, index) => (
         <List
           key={index}
           handle={() => handleDelete(index)}
-          item={i}
+          item={todo}
           handleChecked={() => todoCheck(index)}
         />
       ))}
